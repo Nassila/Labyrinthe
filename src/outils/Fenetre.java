@@ -9,27 +9,28 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Fenetre extends JFrame implements ActionListener {
 
-	private int[][] maze = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1 }, { 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1 },
-			{ 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1 }, { 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
-
-	};
-
+	private int[][] maze;
+	private Mase mazee;
 	private List<Integer> chemin = new ArrayList<Integer>();
-	private JButton DFS, BFS, NEW;
-	private JPanel pannelSud;
 
-	public Fenetre() {
+	private JButton DFS, BFS, NEW;
+	private JPanel pannelSud, pannelNord;
+	private JLabel Lmessage;
+
+	public Fenetre(Mase mazee) {
+		this.mazee = mazee;
+		this.maze = mazee.getMase();
+
 		// titre de la fenetre
 		setTitle("Labyrinthe");
 		// taille de la fenetre
-		setSize(500, 400);
+		setSize(420, 410);
 		// centrer l'affichage de la fenetre à l'ecran
 		setLocationRelativeTo(this);
 		// empecher de redimensionner la fenetre
@@ -40,6 +41,13 @@ public class Fenetre extends JFrame implements ActionListener {
 		pannelSud = new JPanel();
 		pannelSud.setBackground(Color.BLUE);
 		add(pannelSud, "South");
+
+		pannelNord = new JPanel();
+		pannelNord.setBackground(Color.BLUE);
+		add(pannelNord, "North");
+
+		Lmessage = new JLabel("Trouvez la sortie !!");
+		pannelNord.add(Lmessage);
 
 		DFS = new JButton("DFS");
 		pannelSud.add(DFS);
@@ -58,7 +66,7 @@ public class Fenetre extends JFrame implements ActionListener {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.translate(50, 50);
+		g.translate(14, 60);
 
 		for (int index_mazeL = 0; index_mazeL < maze.length; index_mazeL++) {
 			for (int index_mazeC = 0; index_mazeC < maze[0].length; index_mazeC++) {
@@ -69,42 +77,50 @@ public class Fenetre extends JFrame implements ActionListener {
 					break;
 
 				case 3:
-					couleur = Color.red;
+					couleur = Color.MAGENTA;
 					break;
 				default:
 					couleur = Color.WHITE;
 				}
 				g.setColor(couleur);
 				g.fillRect(30 * index_mazeC, 30 * index_mazeL, 30, 30);
-				g.setColor(Color.black);
+				g.setColor(Color.BLUE);
 				g.drawRect(30 * index_mazeC, 30 * index_mazeL, 30, 30);
 			}
 		}
+		if (chemin.size() != 0) {
+			for (int i = 0; i < chemin.size(); i += 2) {
+				int cheminX = chemin.get(i);
+				int cheminY = chemin.get(i + 1);
+				g.setColor(Color.yellow);
+				g.fillRect(cheminX * 30, cheminY * 30, 30, 30);
 
-		for (int i = 0; i < chemin.size(); i += 2) {
-			int cheminX = chemin.get(i);
-			int cheminY = chemin.get(i + 1);
-			g.setColor(Color.GREEN);
-			g.fillRect(cheminX * 30, cheminY * 30, 30, 30);
+			}
 		}
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		if (e.getSource() == DFS) {
+			Lmessage.setText("Algorithme de parcours en profondeur");
 			algorithmes.DFS.chercherChemin(maze, 1, 1, chemin);
 
 			repaint();
-		}
+		} else
 
 		if (e.getSource() == BFS) {
+			Lmessage.setText("Algorithme de parcours en largeur");
 			algorithmes.BFS.chercherChemin(maze, 1, 1, chemin);
 			repaint();
-		}
+		} else
 
 		if (e.getSource() == NEW) {
 			chemin.clear();
+			this.maze = mazee.reinitialiserMase();
 			repaint();
+			Lmessage.setText("Réinitialisation du labyrinthe");
 		}
 
 	}

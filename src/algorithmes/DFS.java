@@ -7,6 +7,7 @@ public class DFS {
 	public static boolean chercherChemin(int[][] maze, int x, int y, List<Integer> chemin) {
 
 		if (maze[y][x] == 3) {
+
 			chemin.add(x);
 			chemin.add(y);
 			return true;
