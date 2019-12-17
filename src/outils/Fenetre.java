@@ -19,7 +19,7 @@ public class Fenetre extends JFrame implements ActionListener {
 	private Mase mazee;
 	private List<Integer> chemin = new ArrayList<Integer>();
 
-	private JButton DFS, BFS, NEW;
+	private JButton DFS, BFS, A, NEW;
 	private JPanel pannelSud, pannelNord;
 	private JLabel Lmessage;
 
@@ -39,11 +39,11 @@ public class Fenetre extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		pannelSud = new JPanel();
-		pannelSud.setBackground(Color.BLUE);
+		pannelSud.setBackground(new Color(0, 162, 232));
 		add(pannelSud, "South");
 
 		pannelNord = new JPanel();
-		pannelNord.setBackground(Color.BLUE);
+		pannelNord.setBackground(new Color(0, 162, 232));
 		add(pannelNord, "North");
 
 		Lmessage = new JLabel("Trouvez la sortie !!");
@@ -56,6 +56,10 @@ public class Fenetre extends JFrame implements ActionListener {
 		BFS = new JButton("BFS");
 		pannelSud.add(BFS);
 		BFS.addActionListener(this);
+
+		A = new JButton("A*");
+		pannelSud.add(A);
+		A.addActionListener(this);
 
 		NEW = new JButton("New");
 		pannelSud.add(NEW);
@@ -84,7 +88,7 @@ public class Fenetre extends JFrame implements ActionListener {
 				}
 				g.setColor(couleur);
 				g.fillRect(30 * index_mazeC, 30 * index_mazeL, 30, 30);
-				g.setColor(Color.BLUE);
+				g.setColor(new Color(0, 162, 232));
 				g.drawRect(30 * index_mazeC, 30 * index_mazeL, 30, 30);
 			}
 		}
@@ -104,16 +108,19 @@ public class Fenetre extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == DFS) {
-			Lmessage.setText("Algorithme de parcours en profondeur");
+			Lmessage.setText("Algorithme de parcours en profondeur DFS");
 			algorithmes.DFS.chercherChemin(maze, 1, 1, chemin);
 
 			repaint();
 		} else
 
 		if (e.getSource() == BFS) {
-			Lmessage.setText("Algorithme de parcours en largeur");
+			Lmessage.setText("Algorithme de parcours en largeur BFS");
 			algorithmes.BFS.chercherChemin(maze, 1, 1, chemin);
+
 			repaint();
+		} else if (e.getSource() == A) {
+
 		} else
 
 		if (e.getSource() == NEW) {

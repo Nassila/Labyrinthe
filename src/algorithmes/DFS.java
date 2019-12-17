@@ -4,47 +4,56 @@ import java.util.List;
 
 public class DFS {
 
-	public static boolean chercherChemin(int[][] maze, int x, int y, List<Integer> chemin) {
+	public static boolean chercherChemin(int[][] maze, int index_ligne, int index_colonne, List<Integer> chemin) {
 
-		if (maze[y][x] == 3) {
+		// 0 : non visité
+		// 1 : mur
+		// 3 : cible
+		// 2 : visité
 
-			chemin.add(x);
-			chemin.add(y);
+		// verifier si on a trouvé la cible
+		if (maze[index_colonne][index_ligne] == 3) {
+
 			return true;
 		}
+		// si non visité
+		if (maze[index_colonne][index_ligne] == 0) {
+			// marquer comme visité
+			maze[index_colonne][index_ligne] = 2;
 
-		if (maze[y][x] == 0) {
-			maze[y][x] = 2;
-
-			int dx = -1;
-			int dy = 0;
-			if (chercherChemin(maze, x + dx, y + dy, chemin)) {
-				chemin.add(x);
-				chemin.add(y);
+			int dl = -1;
+			int dc = 0;
+			// verifer le voisin de gauche
+			if (chercherChemin(maze, index_ligne + dl, index_colonne + dc, chemin)) {
+				chemin.add(index_ligne);
+				chemin.add(index_colonne);
 				return true;
 			}
 
-			dx = 1;
-			dy = 0;
-			if (chercherChemin(maze, x + dx, y + dy, chemin)) {
-				chemin.add(x);
-				chemin.add(y);
+			dl = 1;
+			dc = 0;
+			// verifier le voisin de droite
+			if (chercherChemin(maze, index_ligne + dl, index_colonne + dc, chemin)) {
+				chemin.add(index_ligne);
+				chemin.add(index_colonne);
 				return true;
 			}
 
-			dx = 0;
-			dy = -1;
-			if (chercherChemin(maze, x + dx, y + dy, chemin)) {
-				chemin.add(x);
-				chemin.add(y);
+			dl = 0;
+			dc = -1;
+			// verifier le voisin du haut
+			if (chercherChemin(maze, index_ligne + dl, index_colonne + dc, chemin)) {
+				chemin.add(index_ligne);
+				chemin.add(index_colonne);
 				return true;
 			}
 
-			dx = 0;
-			dy = 1;
-			if (chercherChemin(maze, x + dx, y + dy, chemin)) {
-				chemin.add(x);
-				chemin.add(y);
+			dl = 0;
+			dc = 1;
+			// verifier le voisin du bas
+			if (chercherChemin(maze, index_ligne + dl, index_colonne + dc, chemin)) {
+				chemin.add(index_ligne);
+				chemin.add(index_colonne);
 				return true;
 			}
 		}
